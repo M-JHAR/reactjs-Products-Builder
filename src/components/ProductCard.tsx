@@ -35,9 +35,8 @@ const ProductCard = ({product}: IProbs) =>
             </div>
 
             <div className="flex items-center justify-between space-x-2 mt-3">
-                <Button className="bg-indigo-700" width='w-fit'>EDIT</Button>
-                <Button className="bg-red-700">DELETE</Button>
-                <Button className="bg-green-700">SUCCESS</Button>
+                <Button className="bg-indigo-700 hover:bg-indigo-800" width='w-fit'>EDIT</Button>
+                <Button className="bg-red-700 hover:bg-red-800">DELETE</Button>
             </div>
 
         </div>
