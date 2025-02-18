@@ -1,10 +1,10 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { formInputsList, productList } from "./components/data";
+import { formInputsList, productList } from "./data";
 import ProductCard from "./components/ProductCard";
 import Modal from "./components/ui/Modal";
 import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
-import { IProduct } from "./components/interfaces";
+import { IProduct } from "./interfaces";
 
 // ** SM -> MD -> LG -> XL -> 2xl
 const App = () => {
@@ -32,13 +32,12 @@ const App = () => {
     });
   };
 
-  const submitHandler = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  };
-
   const onCancel = () => {
     setProduct(defaultProductObj);
     closeModal();
+  };
+  const submitHandler = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
   };
 
   // ** Renders
