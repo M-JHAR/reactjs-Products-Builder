@@ -5,6 +5,7 @@ import Modal from "./components/ui/Modal";
 import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
 import { IProduct } from "./interfaces";
+import { productValidation } from "./validation";
 
 // ** SM -> MD -> LG -> XL -> 2xl
 const App = () => {
@@ -38,6 +39,14 @@ const App = () => {
   };
   const submitHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const error = productValidation({
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      imageURL: product.imageURL,
+    });
+
+    console.log(error);
   };
 
   // ** Renders
