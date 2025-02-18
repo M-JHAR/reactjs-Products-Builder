@@ -32,7 +32,7 @@ const App = ()=>
       [name]: value,
     });
   }
-
+  
   // ** Renders
   const renderProductList = productList.map( product => <ProductCard key={product.id} product={product}/>);
   const renderFormInputList = formInputsList.map( input =>
@@ -41,12 +41,10 @@ const App = ()=>
       <label htmlFor={input.id} className="mb-[2px] text-md font-medium text-gray-700">
         {input.label}
       </label>
-      {/*  ** FIX THE BELOW ERROR **   */}
-      {/*<Input type={input.type} id={input.id} name={input.name} value="" onChange={onChangeHandler}/>*/}
-      <Input type={input.type} id={input.id} name={input.name} value="" onChange={onChangeHandler}/>
+      <Input type={input.type} id={input.id} name={input.name} value={product[input.name]} onChange={onChangeHandler}/>
     </div>
   ));
-
+  console.log(product);
     return(
         <main className="container mx-auto">
           <Button className="bg-indigo-700 hover:bg-indigo-800" onClick={openModal}>Add</Button>
