@@ -142,7 +142,7 @@ export const productList: IProduct[] = [
     imageURL:
       "https://th.bing.com/th/id/OIP.xyl5tbt3T3mzXfUpW03GHQHaHa?rs=1&pid=ImgDetMain",
     price: "24.99",
-    colors: ["Multicolor"],
+    colors: ["Black", "Red", "Blue", "Green", "Gold"],
     category: {
       name: "Fitness",
       imageURL:

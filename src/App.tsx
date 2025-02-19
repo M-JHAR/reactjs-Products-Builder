@@ -8,6 +8,7 @@ import { IProduct } from "./interfaces";
 import { productValidation } from "./validation";
 import ErrorMessages from "./components/ErrorMessages";
 import CircleColor from "./components/CircleColor";
+import { v4 as uuid } from "uuid";
 
 // ** SM -> MD -> LG -> XL -> 2xl
 const App = () => {
@@ -20,8 +21,17 @@ const App = () => {
     colors: [],
   };
 
-  // **************************** States ****************************
+  const defaultErrorsObj = 
+  {
+    title: "",
+    description: "",
+    imageURL: "",
+    price: "",
+  }
 
+  // **************************** States ****************************
+  
+  const [products, setProducts] = useState<IProduct[]>(productList);
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
   const [tempColors, setTempColors] = useState<string[]>([]);
   const [errors, setErrors] = useState({
@@ -52,6 +62,8 @@ const App = () => {
 
   const onCancel = () => {
     setProduct(defaultProductObj);
+    setTempColors([]);
+    setErrors(defaultErrorsObj);
     closeModal();
   };
   const submitHandler = (event: FormEvent<HTMLFormElement>) => {
@@ -61,20 +73,25 @@ const App = () => {
     const errors = productValidation({ title, price, imageURL, description });
 
     const hasErrorMsg =
-      Object.values(errors).some((value) => value !== "") &&
-      Object.values(errors).every((value) => value !== "");
+      Object.values(errors).some((value) => value !== "");
 
+    console.log(hasErrorMsg);
     if (hasErrorMsg) {
       setErrors(errors);
       return;
     }
 
-    console.log("Send this product to our server.");
+    // Send this product to our server.
+    setProducts((prev) => [{...product, id: uuid(), colors: tempColors}, ...prev] );
+    setProduct(defaultProductObj);
+    setTempColors([]);
+    closeModal();
+
   };
 
   // **************************** Renders ****************************
 
-  const renderProductList = productList.map((product) => (
+  const renderProductList = products.map((product) => (
     <ProductCard key={product.id} product={product} />
   ));
   const renderFormInputList = formInputsList.map((input) => (
@@ -112,9 +129,12 @@ const App = () => {
 
   return (
     <main className="container mx-auto">
-      <Button className="bg-indigo-700 hover:bg-indigo-800" onClick={openModal}>
-        Add
-      </Button>
+      <div className="flex justify-center mt-4">
+        <Button className="bg-indigo-700 hover:bg-indigo-800" width="w-fit" onClick={openModal}>
+          Build Product
+        </Button>
+      </div>
+
 
       <div className="m-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 rounded-md ">
         {renderProductList}
@@ -138,10 +158,10 @@ const App = () => {
             ))}
           </div>
           <div className="flex items-center space-x-3">
-            <Button className="bg-indigo-700 hover:bg-indigo-800">
+            <Button type="submit" className="bg-indigo-700 hover:bg-indigo-800">
               Submit
             </Button>
-            <Button
+            <Button type="reset"
               className="bg-gray-400 hover:bg-gray-500"
               onClick={onCancel}
             >
