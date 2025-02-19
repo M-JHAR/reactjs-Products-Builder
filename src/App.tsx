@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { formInputsList, productList } from "./data";
+import { colors, formInputsList, productList } from "./data";
 import ProductCard from "./components/ProductCard";
 import Modal from "./components/ui/Modal";
 import Button from "./components/ui/Button";
@@ -7,6 +7,7 @@ import Input from "./components/ui/Input";
 import { IProduct } from "./interfaces";
 import { productValidation } from "./validation";
 import ErrorMessages from "./components/ErrorMessages";
+import CircleColor from "./components/CircleColor";
 
 // ** SM -> MD -> LG -> XL -> 2xl
 const App = () => {
@@ -22,7 +23,13 @@ const App = () => {
   // **************************** States ****************************
 
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
-  const [errors, setErrors] = useState({title: "", description: "", imageURL: "", price: ""});
+  const [tempColors, setTempColors] = useState<string[]>([]);
+  const [errors, setErrors] = useState({
+    title: "",
+    description: "",
+    imageURL: "",
+    price: "",
+  });
   const [isOpen, setIsOpen] = useState(false);
 
   // **************************** Handlers ****************************
@@ -37,12 +44,10 @@ const App = () => {
       [name]: value,
     });
 
-    setErrors(
-      {
-        ...errors,
-        [name]: "",
-      }
-    )
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
   };
 
   const onCancel = () => {
@@ -56,17 +61,15 @@ const App = () => {
     const errors = productValidation({ title, price, imageURL, description });
 
     const hasErrorMsg =
-      Object.values(errors).some((value) => value !== "") && Object.values(errors).every((value) => value !== "");
-      
+      Object.values(errors).some((value) => value !== "") &&
+      Object.values(errors).every((value) => value !== "");
 
-    if(hasErrorMsg)
-    {
+    if (hasErrorMsg) {
       setErrors(errors);
       return;
     }
 
     console.log("Send this product to our server.");
-
   };
 
   // **************************** Renders ****************************
@@ -89,8 +92,22 @@ const App = () => {
         value={product[input.name]}
         onChange={onChangeHandler}
       />
-      <ErrorMessages msg={errors[input.name]}/>
+      <ErrorMessages msg={errors[input.name]} />
     </div>
+  ));
+
+  const renderProductColors = colors.map((color) => (
+    <CircleColor
+      key={color} color={color}
+      onClick={() => {
+        if(tempColors.includes(color))
+        {
+          setTempColors((prev) => prev.filter((item) => item !== color))
+          return;
+        }
+        setTempColors((prev) => [...prev, color]);
+      }}
+    />
   ));
 
   return (
@@ -106,6 +123,20 @@ const App = () => {
       <Modal isOpen={isOpen} closeModal={closeModal} title={"ADD NEW PRODUCT"}>
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderFormInputList}
+          <div className="flex items-center space-x-1 flex-wrap">
+            {renderProductColors}
+          </div>
+          <div className="flex items-center space-x-1 flex-wrap">
+            {tempColors.map((color) => (
+              <span
+                key={color}
+                className="mr-1 mb-1 p-1 text-xs rounded-md text-white"
+                style={{ backgroundColor: color }}
+              >
+                {color}
+              </span>
+            ))}
+          </div>
           <div className="flex items-center space-x-3">
             <Button className="bg-indigo-700 hover:bg-indigo-800">
               Submit

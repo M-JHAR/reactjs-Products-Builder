@@ -177,3 +177,20 @@ export const formInputsList: IFormInput[] = [
     type: "text",
   },
 ];
+
+export const colors: string[] = [
+  "#FF0000",
+  "#0000FF",
+  "#008000",
+  "#FFFF00",
+  "#800080",
+  "#FFA500",
+  "#00FFFF",
+  "#FFC0CB",
+  "#A52A2A",
+  "#4682B4",
+  "#32CD32",
+  "#FFD700",
+  "#4B0082",
+  "#FF6347",
+];
