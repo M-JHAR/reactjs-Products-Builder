@@ -38,18 +38,34 @@ const App = () => {
   const [tempColors, setTempColors] = useState<string[]>([]);
   const [errors, setErrors] = useState(defaultErrorsObj);
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<ICategory>(categories[0]);
   const [productToEdit, setProductToEdit] = useState<IProduct>(defaultProductObj);
+
 
   // **************************** Handlers ****************************
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
+  const openEditModal = () => setIsOpenEditModal(true);
+  const closeEditModal = () => setIsOpenEditModal(false);
 
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
     setProduct({
       ...product,
+      [name]: value,
+    });
+
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
+  };
+  const onEditChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = event.target;
+    setProductToEdit({
+      ...productToEdit,
       [name]: value,
     });
 
@@ -65,7 +81,34 @@ const App = () => {
     setErrors(defaultErrorsObj);
     closeModal();
   };
+  const onEditCancel = () => {
+    setProductToEdit(defaultProductObj);
+    setErrors(defaultErrorsObj);
+    closeEditModal();
+  };
   const submitHandler = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const { title, price, imageURL, description } = product;
+
+    const errors = productValidation({ title, price, imageURL, description, colors: tempColors});
+
+    const hasErrorMsg =
+      Object.values(errors).some((value) => value !== "");
+
+    console.log(hasErrorMsg);
+    if (hasErrorMsg) {
+      setErrors(errors);
+      return;
+    }
+
+    // Send this product to our server.
+    setProducts((prev) => [{...product, id: uuid(), colors: tempColors, category: selectedCategory}, ...prev] );
+    setProduct(defaultProductObj);
+    setTempColors([]);
+    closeModal();
+
+  };
+  const submitEditHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { title, price, imageURL, description } = product;
 
@@ -91,7 +134,7 @@ const App = () => {
   // **************************** Renders ****************************
 
   const renderProductList = products.map((product) => (
-    <ProductCard key={product.id} product={product} setProductToEdit={setProductToEdit} />
+    <ProductCard key={product.id} product={product} setProductToEdit={setProductToEdit} openEditModal={openEditModal} />
   ));
   const renderFormInputList = formInputsList.map((input) => (
     <div className="flex flex-col" key={input.id}>
@@ -141,6 +184,7 @@ const App = () => {
         {renderProductList}
       </div>
 
+      {/* ADD PRODUCT MODAL */}
       <Modal isOpen={isOpen} closeModal={closeModal} title={"ADD NEW PRODUCT"}>
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderFormInputList}
@@ -170,6 +214,50 @@ const App = () => {
             >
               Cancel
             </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* EDIT PRODUCT MODAL */}
+      <Modal isOpen={isOpenEditModal} closeModal={closeEditModal} title={"EDIT THIS PRODUCT"}>
+        <form className="space-y-3" onSubmit={submitEditHandler}>
+        <div className="flex flex-col">
+          <label htmlFor="title"
+            className="mb-[2px] text-md font-medium text-gray-700"
+          >
+            "Product Title"
+          </label>
+          <Input
+            type="text"
+            id="title"
+            name="title"
+            value={productToEdit["title"]}
+            onChange={onEditChangeHandler}
+          />
+          <ErrorMessages msg={''} />
+        </div>
+
+        <div className="flex flex-col">
+          <label htmlFor="description"
+            className="mb-[2px] text-md font-medium text-gray-700"
+          >
+            "Product Description"
+          </label>
+          <Input
+            type="description"
+            id="description"
+            name="description"
+            value={productToEdit["description"]}
+            onChange={onEditChangeHandler}
+          />
+          <ErrorMessages msg={''} />
+          </div>
+
+
+
+          <div className="flex items-center space-x-3">
+            <Button type="submit" className="bg-indigo-700 hover:bg-indigo-800">Submit</Button>
+            <Button type="reset" className="bg-gray-400 hover:bg-gray-500" onClick={onEditCancel}>Cancel</Button>
           </div>
         </form>
       </Modal>
