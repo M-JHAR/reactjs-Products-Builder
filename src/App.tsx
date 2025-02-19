@@ -36,6 +36,13 @@ const App = () => {
       ...product,
       [name]: value,
     });
+
+    setErrors(
+      {
+        ...errors,
+        [name]: "",
+      }
+    )
   };
 
   const onCancel = () => {
