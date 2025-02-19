@@ -6,22 +6,27 @@ import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
 import { IProduct } from "./interfaces";
 import { productValidation } from "./validation";
+import ErrorMessages from "./components/ErrorMessages";
 
 // ** SM -> MD -> LG -> XL -> 2xl
 const App = () => {
   const defaultProductObj: IProduct = {
     title: "",
     description: "",
-    colors: [],
-    category: { name: "", imageURL: "" },
     imageURL: "",
     price: "",
+    category: { name: "", imageURL: "" },
+    colors: [],
   };
-  // ** States
+
+  // **************************** States ****************************
+
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
+  const [errors, setErrors] = useState({title: "", description: "", imageURL: "", price: ""});
   const [isOpen, setIsOpen] = useState(false);
 
-  // ** Handlers
+  // **************************** Handlers ****************************
+
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
@@ -39,17 +44,26 @@ const App = () => {
   };
   const submitHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const error = productValidation({
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      imageURL: product.imageURL,
-    });
+    const { title, price, imageURL, description } = product;
 
-    console.log(error);
+    const errors = productValidation({ title, price, imageURL, description });
+
+    const hasErrorMsg =
+      Object.values(errors).some((value) => value !== "") && Object.values(errors).every((value) => value !== "");
+      
+
+    if(hasErrorMsg)
+    {
+      setErrors(errors);
+      return;
+    }
+
+    console.log("Send this product to our server.");
+
   };
 
-  // ** Renders
+  // **************************** Renders ****************************
+
   const renderProductList = productList.map((product) => (
     <ProductCard key={product.id} product={product} />
   ));
@@ -68,6 +82,7 @@ const App = () => {
         value={product[input.name]}
         onChange={onChangeHandler}
       />
+      <ErrorMessages msg={errors[input.name]}/>
     </div>
   ));
 

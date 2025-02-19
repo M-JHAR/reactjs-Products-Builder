@@ -1,7 +1,7 @@
 
 /**
  * 
- * @param {{  title: string, description: string, price: string, imageURL: string}} product 
+ * @param product 
  * @returns - if the product param is not valid the error object will contain error messages
  */
 export const productValidation = (product: {  title: string, description: string, price: string, imageURL: string}) => 
@@ -14,7 +14,7 @@ export const productValidation = (product: {  title: string, description: string
     price: "",
   };
 
-  const validUrl = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/.test(product.imageURL);
+  const validUrl = /^(ftp|http|https):\/\/[^"]+$/.test(product.imageURL);
 
   if(!product.title.trim() || product.title.length < 10 || product.title.length > 80)
   {
