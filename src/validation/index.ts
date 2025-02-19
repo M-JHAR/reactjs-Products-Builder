@@ -4,14 +4,15 @@
  * @param product 
  * @returns - if the product param is not valid the error object will contain error messages
  */
-export const productValidation = (product: {  title: string, description: string, price: string, imageURL: string}) => 
+export const productValidation = (product: {  title: string, description: string, price: string, imageURL: string, colors: string[]}) => 
 {
-  const errors: {title: string, description: string, imageURL: string, price: string} = 
+  const errors: {title: string, description: string, imageURL: string, price: string, colors: string} = 
   {
     title: "",
     description: "",
     imageURL: "",
     price: "",
+    colors: ""
   };
 
   const validUrl = /^(ftp|http|https):\/\/[^"]+$/.test(product.imageURL);
@@ -31,6 +32,10 @@ export const productValidation = (product: {  title: string, description: string
   if(!product.imageURL.trim() || !validUrl)
   {
     errors.imageURL = "Valid image URL is required!."
+  }
+  if(product.colors.length <= 0)
+  {
+    errors.colors = "Select one or more color!."
   }
 
   return errors;

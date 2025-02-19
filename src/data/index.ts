@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { IFormInput, IProduct } from "../interfaces";
+import { ICategory, IFormInput, IProduct } from "../interfaces";
 
 export const productList: IProduct[] = [
   {
@@ -14,7 +14,7 @@ export const productList: IProduct[] = [
     category: {
       name: "Electronics",
       imageURL:
-        "https://th.bing.com/th/id/OIP.VKQ__hT5n6GNtqYvzlItVgHaHa?w=192&h=192&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+        "https://th.bing.com/th/id/OIP.24hPcANHaYdUsQX5QBArygHaHa?rs=1&pid=ImgDetMain",
     },
   },
   {
@@ -27,9 +27,9 @@ export const productList: IProduct[] = [
     price: "149.99",
     colors: ["Black", "Silver", "Rose Gold"],
     category: {
-      name: "Wearables",
+      name: "Electronics",
       imageURL:
-        "https://th.bing.com/th/id/OIP.j7-KnTuZp6fACkJfqdFVxQHaHa?rs=1&pid=ImgDetMain",
+        "https://th.bing.com/th/id/OIP.24hPcANHaYdUsQX5QBArygHaHa?rs=1&pid=ImgDetMain",
     },
   },
   {
@@ -41,9 +41,9 @@ export const productList: IProduct[] = [
     price: "79.99",
     colors: ["Black", "White"],
     category: {
-      name: "Gaming",
+      name: "Electronics",
       imageURL:
-        "https://th.bing.com/th/id/OIP.YMsHaOTxhOybx0h-ZcpnegHaHa?rs=1&pid=ImgDetMain",
+        "https://th.bing.com/th/id/OIP.24hPcANHaYdUsQX5QBArygHaHa?rs=1&pid=ImgDetMain",
     },
   },
   {
@@ -56,9 +56,9 @@ export const productList: IProduct[] = [
     price: "199.99",
     colors: ["Black", "Gray", "Blue"],
     category: {
-      name: "Furniture",
+      name: "Computer Accessories",
       imageURL:
-        "https://i5.walmartimages.com/asr/56883df4-5d5a-4483-a3f0-25c28b22a100_1.e9041c88d624050a115dae5dbf70160d.jpeg",
+        "https://th.bing.com/th/id/OIP.vH256gqdIXyF-CKExUfmaQHaEh?rs=1&pid=ImgDetMain",
     },
   },
   {
@@ -71,9 +71,9 @@ export const productList: IProduct[] = [
     price: "29.99",
     colors: ["Silver", "Blue", "Red"],
     category: {
-      name: "Accessories",
+      name: "Fitness",
       imageURL:
-        "https://th.bing.com/th/id/OIP.NCJe4n0DNUZCbzgQkYYinwHaHa?rs=1&pid=ImgDetMain",
+        "https://th.bing.com/th/id/OIP.EwbatycHx_915hcNzd7vRgHaE8?rs=1&pid=ImgDetMain",
     },
   },
   {
@@ -86,7 +86,7 @@ export const productList: IProduct[] = [
     price: "599.99",
     colors: ["Black"],
     category: {
-      name: "Home Entertainment",
+      name: "Computer Accessories",
       imageURL:
         "https://th.bing.com/th/id/OIP.Wx_lY9E6QIi4duGfH2OyOQHaHX?rs=1&pid=ImgDetMain",
     },
@@ -100,9 +100,9 @@ export const productList: IProduct[] = [
     price: "39.99",
     colors: ["Black", "White"],
     category: {
-      name: "Accessories",
+      name: "Computer Accessories",
       imageURL:
-        "https://www.bhphotovideo.com/images/images2000x2000/naztech_14490_power_pad_qi_certified_1418643.jpg",
+        "https://th.bing.com/th/id/OIP.vH256gqdIXyF-CKExUfmaQHaEh?rs=1&pid=ImgDetMain",
     },
   },
   {
@@ -115,9 +115,9 @@ export const productList: IProduct[] = [
     price: "89.99",
     colors: ["Black", "Red", "Blue"],
     category: {
-      name: "Audio",
+      name: "Computer Accessories",
       imageURL:
-        "https://i5.walmartimages.com/asr/7d82ed12-9db9-4b4d-ace6-df9e4a77b6b4.25b0ad2869d616edace41b1db7a9bd6d.jpeg",
+        "https://th.bing.com/th/id/OIP.vH256gqdIXyF-CKExUfmaQHaEh?rs=1&pid=ImgDetMain",
     },
   },
   {
@@ -131,7 +131,7 @@ export const productList: IProduct[] = [
     category: {
       name: "Computer Accessories",
       imageURL:
-        "https://th.bing.com/th/id/OIP.MeMkdYt_T2ChwIjaelQtdQHaEW?rs=1&pid=ImgDetMain",
+        "https://th.bing.com/th/id/OIP.vH256gqdIXyF-CKExUfmaQHaEh?rs=1&pid=ImgDetMain",
     },
   },
   {
@@ -146,7 +146,7 @@ export const productList: IProduct[] = [
     category: {
       name: "Fitness",
       imageURL:
-        "https://th.bing.com/th/id/OIP.xyl5tbt3T3mzXfUpW03GHQHaHa?rs=1&pid=ImgDetMain",
+        "https://th.bing.com/th/id/OIP.EwbatycHx_915hcNzd7vRgHaE8?rs=1&pid=ImgDetMain",
     },
   },
 ];
@@ -193,4 +193,22 @@ export const colors: string[] = [
   "#FFD700",
   "#4B0082",
   "#FF6347",
+];
+
+export const categories: ICategory[] = [
+  {
+    id: uuid(),
+    imageURL: "https://th.bing.com/th/id/OIP.EwbatycHx_915hcNzd7vRgHaE8?rs=1&pid=ImgDetMain",
+    name: "Fitness",
+  },
+  {
+    id: uuid(),
+    imageURL: "https://th.bing.com/th/id/OIP.vH256gqdIXyF-CKExUfmaQHaEh?rs=1&pid=ImgDetMain",
+    name: "Computer Accessories",
+  },
+  {
+    id: uuid(),
+    imageURL: "https://th.bing.com/th/id/OIP.24hPcANHaYdUsQX5QBArygHaHa?rs=1&pid=ImgDetMain",
+    name: "Electronics",
+  },
 ];

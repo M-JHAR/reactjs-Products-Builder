@@ -1,14 +1,15 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { colors, formInputsList, productList } from "./data";
+import { categories, colors, formInputsList, productList } from "./data";
 import ProductCard from "./components/ProductCard";
 import Modal from "./components/ui/Modal";
 import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
-import { IProduct } from "./interfaces";
+import { ICategory, IProduct } from "./interfaces";
 import { productValidation } from "./validation";
 import ErrorMessages from "./components/ErrorMessages";
 import CircleColor from "./components/CircleColor";
 import { v4 as uuid } from "uuid";
+import Select from "./components/ui/Select";
 
 // ** SM -> MD -> LG -> XL -> 2xl
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
     description: "",
     imageURL: "",
     price: "",
+    colors: ""
   }
 
   // **************************** States ****************************
@@ -34,13 +36,10 @@ const App = () => {
   const [products, setProducts] = useState<IProduct[]>(productList);
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
   const [tempColors, setTempColors] = useState<string[]>([]);
-  const [errors, setErrors] = useState({
-    title: "",
-    description: "",
-    imageURL: "",
-    price: "",
-  });
+  const [errors, setErrors] = useState(defaultErrorsObj);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<ICategory>(categories[0]);
+  const [productToEdit, setProductToEdit] = useState<IProduct>(defaultProductObj);
 
   // **************************** Handlers ****************************
 
@@ -70,7 +69,7 @@ const App = () => {
     event.preventDefault();
     const { title, price, imageURL, description } = product;
 
-    const errors = productValidation({ title, price, imageURL, description });
+    const errors = productValidation({ title, price, imageURL, description, colors: tempColors});
 
     const hasErrorMsg =
       Object.values(errors).some((value) => value !== "");
@@ -82,7 +81,7 @@ const App = () => {
     }
 
     // Send this product to our server.
-    setProducts((prev) => [{...product, id: uuid(), colors: tempColors}, ...prev] );
+    setProducts((prev) => [{...product, id: uuid(), colors: tempColors, category: selectedCategory}, ...prev] );
     setProduct(defaultProductObj);
     setTempColors([]);
     closeModal();
@@ -92,7 +91,7 @@ const App = () => {
   // **************************** Renders ****************************
 
   const renderProductList = products.map((product) => (
-    <ProductCard key={product.id} product={product} />
+    <ProductCard key={product.id} product={product} setProductToEdit={setProductToEdit} />
   ));
   const renderFormInputList = formInputsList.map((input) => (
     <div className="flex flex-col" key={input.id}>
@@ -117,6 +116,8 @@ const App = () => {
     <CircleColor
       key={color} color={color}
       onClick={() => {
+        setErrors({...errors, ["colors"]: ""});
+
         if(tempColors.includes(color))
         {
           setTempColors((prev) => prev.filter((item) => item !== color))
@@ -143,6 +144,7 @@ const App = () => {
       <Modal isOpen={isOpen} closeModal={closeModal} title={"ADD NEW PRODUCT"}>
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderFormInputList}
+          <Select selected={selectedCategory} setSelected={setSelectedCategory} />
           <div className="flex items-center space-x-1 flex-wrap">
             {renderProductColors}
           </div>
@@ -156,6 +158,7 @@ const App = () => {
                 {color}
               </span>
             ))}
+            <ErrorMessages msg={errors.colors} />
           </div>
           <div className="flex items-center space-x-3">
             <Button type="submit" className="bg-indigo-700 hover:bg-indigo-800">
