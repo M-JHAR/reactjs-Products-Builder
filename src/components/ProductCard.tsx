@@ -8,9 +8,11 @@ interface IProbs {
   product: IProduct;
   setProductToEdit: (product: IProduct) => void;
   openEditModal: ()=> void;
+  idx: number;
+  setProductToEditIdx: (value: number) => void;
 }
 
-const ProductCard = ({ product, setProductToEdit, openEditModal}: IProbs) => {
+const ProductCard = ({ product, setProductToEdit, openEditModal, idx, setProductToEditIdx}: IProbs) => {
   const { title, imageURL, description, price, category, colors } = product;
 
   // ************* Renders ****************
@@ -21,6 +23,7 @@ const ProductCard = ({ product, setProductToEdit, openEditModal}: IProbs) => {
   const onEdit = () => {
     setProductToEdit(product);
     openEditModal();
+    setProductToEditIdx(idx);
   };
 
   return (

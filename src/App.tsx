@@ -36,12 +36,13 @@ const App = () => {
   
   const [products, setProducts] = useState<IProduct[]>(productList);
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
+  const [productToEdit, setProductToEdit] = useState<IProduct>(defaultProductObj);
+  const [productToEditIdx, setProductToEditIdx] = useState<number>(0);
   const [tempColors, setTempColors] = useState<string[]>([]);
   const [errors, setErrors] = useState(defaultErrorsObj);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<ICategory>(categories[0]);
-  const [productToEdit, setProductToEdit] = useState<IProduct>(defaultProductObj);
 
 
   // **************************** Handlers ****************************
@@ -85,6 +86,7 @@ const App = () => {
   const onEditCancel = () => {
     setProductToEdit(defaultProductObj);
     setErrors(defaultErrorsObj);
+    setTempColors([]);
     closeEditModal();
   };
   const submitHandler = (event: FormEvent<HTMLFormElement>) => {
@@ -109,11 +111,12 @@ const App = () => {
     closeModal();
 
   };
+
   const submitEditHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { title, price, imageURL, description } = productToEdit;
 
-    const errors = productValidation({ title, price, imageURL, description, colors: tempColors});
+    const errors = productValidation({ title, price, imageURL, description});
 
     const hasErrorMsg =
       Object.values(errors).some((value) => value !== "");
@@ -124,6 +127,10 @@ const App = () => {
       return;
     }
     
+    const updatedProducts = [...products];
+    updatedProducts[productToEditIdx] = {...productToEdit, colors: tempColors.concat(productToEdit.colors)};
+    setProducts(updatedProducts);
+
     setProductToEdit(defaultProductObj);
     setTempColors([]);
     closeEditModal();
@@ -132,8 +139,8 @@ const App = () => {
 
   // **************************** Renders ****************************
 
-  const renderProductList = products.map((product) => (
-    <ProductCard key={product.id} product={product} setProductToEdit={setProductToEdit} openEditModal={openEditModal} />
+  const renderProductList = products.map((product, idx) => (
+    <ProductCard key={product.id} product={product} setProductToEdit={setProductToEdit} openEditModal={openEditModal} idx={idx} setProductToEditIdx={setProductToEditIdx} />
   ));
   const renderFormInputList = formInputsList.map((input) => (
     <div className="flex flex-col" key={input.id}>
@@ -162,7 +169,13 @@ const App = () => {
 
         if(tempColors.includes(color))
         {
-          setTempColors((prev) => prev.filter((item) => item !== color))
+          setTempColors((prev) => prev.filter((item) => item !== color));
+          return;
+        }
+        if(productToEdit.colors.includes(color))
+        {
+          setTempColors((prev) => prev.filter((item) => item !== color));
+          setProductToEdit((prev) => ({...prev, colors: (prev.colors.filter((item) => item !== color))}));
           return;
         }
         setTempColors((prev) => [...prev, color]);
@@ -242,10 +255,26 @@ const App = () => {
       <Modal isOpen={isOpenEditModal} closeModal={closeEditModal} title={"EDIT THIS PRODUCT"}>
         <form className="space-y-3" onSubmit={submitEditHandler}>
             
-            {renderProductToEdit('title', 'title', 'Product Title')}
-            {renderProductToEdit('description', 'description', 'Product Description')}
-            {renderProductToEdit('imageURL', 'imageURL', 'Product Image URL')}
-            {renderProductToEdit('price', 'price', 'Product Price')}
+          {renderProductToEdit('title', 'title', 'Product Title')}
+          {renderProductToEdit('description', 'description', 'Product Description')}
+          {renderProductToEdit('imageURL', 'imageURL', 'Product Image URL')}
+          {renderProductToEdit('price', 'price', 'Product Price')}
+
+          <div className="flex items-center space-x-1 flex-wrap">
+            {renderProductColors}
+          </div>
+          <div className="flex items-center space-x-1 flex-wrap">
+            {tempColors.concat(productToEdit.colors).map((color) => (
+              <span
+                key={color}
+                className="mr-1 mb-1 p-1 text-xs rounded-md text-white"
+                style={{ backgroundColor: color }}
+              >
+                {color}
+              </span>
+            ))}
+            <ErrorMessages msg={errors.colors} />
+          </div>
 
           <div className="flex items-center space-x-3">
             <Button type="submit" className="bg-indigo-700 hover:bg-indigo-800">Submit</Button>
