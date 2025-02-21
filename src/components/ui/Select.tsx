@@ -11,7 +11,7 @@ import { categories } from "../../data";
 import { ICategory } from "../../interfaces";
 
 interface IProbs {
-  selected: ICategory;
+  selected: {imageURL: string, name: string};
   setSelected: (category: ICategory) => void;
 }
 const Select = ({ selected, setSelected }: IProbs) => {

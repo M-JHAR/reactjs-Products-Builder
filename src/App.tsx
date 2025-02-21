@@ -260,6 +260,8 @@ const App = () => {
           {renderProductToEdit('imageURL', 'imageURL', 'Product Image URL')}
           {renderProductToEdit('price', 'price', 'Product Price')}
 
+          <Select selected={productToEdit.category} setSelected={(value) => (setProductToEdit({...productToEdit, category: value}))} />
+
           <div className="flex items-center space-x-1 flex-wrap">
             {renderProductColors}
           </div>
