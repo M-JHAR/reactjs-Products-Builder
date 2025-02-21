@@ -246,7 +246,7 @@ const App = () => {
   return (
     <main className="container mx-auto">
       <div className="flex justify-center mt-4">
-        <Button className="bg-indigo-700 hover:bg-indigo-800" width="w-fit" onClick={openModal}>
+        <Button className="bg-amber-700 hover:bg-amber-900" width="w-fit" onClick={openModal}>
           Build a Product
         </Button>
       </div>
