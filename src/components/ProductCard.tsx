@@ -8,11 +8,12 @@ interface IProbs {
   product: IProduct;
   setProductToEdit: (product: IProduct) => void;
   openEditModal: ()=> void;
+  openDeleteModal: ()=> void;
   idx: number;
   setProductToEditIdx: (value: number) => void;
 }
 
-const ProductCard = ({ product, setProductToEdit, openEditModal, idx, setProductToEditIdx}: IProbs) => {
+const ProductCard = ({ product, setProductToEdit, openEditModal, openDeleteModal, idx, setProductToEditIdx}: IProbs) => {
   const { title, imageURL, description, price, category, colors } = product;
 
   // ************* Renders ****************
@@ -24,6 +25,12 @@ const ProductCard = ({ product, setProductToEdit, openEditModal, idx, setProduct
     setProductToEdit(product);
     openEditModal();
     setProductToEditIdx(idx);
+  };
+  
+  const onDelete = ()=>
+  {
+    setProductToEdit(product);
+    openDeleteModal();
   };
 
   return (
@@ -54,7 +61,7 @@ const ProductCard = ({ product, setProductToEdit, openEditModal, idx, setProduct
         <Button className="bg-indigo-700 hover:bg-indigo-800" onClick={onEdit}>
           EDIT
         </Button>
-        <Button className="bg-red-700 hover:bg-red-800">DELETE</Button>
+        <Button className="bg-red-700 hover:bg-red-800" onClick={onDelete}>DELETE</Button>
       </div>
     </div>
   );

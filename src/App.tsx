@@ -42,6 +42,7 @@ const App = () => {
   const [errors, setErrors] = useState(defaultErrorsObj);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<ICategory>(categories[0]);
 
 
@@ -51,6 +52,8 @@ const App = () => {
   const closeModal = () => setIsOpen(false);
   const openEditModal = () => setIsOpenEditModal(true);
   const closeEditModal = () => setIsOpenEditModal(false);
+  const openDeleteModal = () => setIsOpenDeleteModal(true);
+  const closeDeleteModal = () => setIsOpenDeleteModal(false);
 
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -83,12 +86,17 @@ const App = () => {
     setErrors(defaultErrorsObj);
     closeModal();
   };
+
   const onEditCancel = () => {
     setProductToEdit(defaultProductObj);
     setErrors(defaultErrorsObj);
     setTempColors([]);
     closeEditModal();
   };
+
+  const onDeleteCancel = () => {
+    closeDeleteModal();
+  }
   const submitHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { title, price, imageURL, description } = product;
@@ -126,7 +134,6 @@ const App = () => {
       setErrors(errors);
       return;
     }
-    
     const updatedProducts = [...products];
     updatedProducts[productToEditIdx] = {...productToEdit, colors: tempColors.concat(productToEdit.colors)};
     setProducts(updatedProducts);
@@ -137,10 +144,22 @@ const App = () => {
 
   };
 
+  const submitDeleteHandler = (event: FormEvent<HTMLFormElement>) =>{
+      event.preventDefault();
+  };
+
+  const deleteProductHandler = () => 
+  {
+    const filtered = products.filter((product) => product.id !== productToEdit.id);
+    setProducts(filtered);
+    closeDeleteModal();
+  }
+    
+
   // **************************** Renders ****************************
 
   const renderProductList = products.map((product, idx) => (
-    <ProductCard key={product.id} product={product} setProductToEdit={setProductToEdit} openEditModal={openEditModal} idx={idx} setProductToEditIdx={setProductToEditIdx} />
+    <ProductCard key={product.id} product={product} setProductToEdit={setProductToEdit} openEditModal={openEditModal} openDeleteModal={openDeleteModal} idx={idx} setProductToEditIdx={setProductToEditIdx} />
   ));
   const renderFormInputList = formInputsList.map((input) => (
     <div className="flex flex-col" key={input.id}>
@@ -208,7 +227,7 @@ const App = () => {
     <main className="container mx-auto">
       <div className="flex justify-center mt-4">
         <Button className="bg-indigo-700 hover:bg-indigo-800" width="w-fit" onClick={openModal}>
-          Build Product
+          Build a Product
         </Button>
       </div>
 
@@ -282,6 +301,23 @@ const App = () => {
             <Button type="submit" className="bg-indigo-700 hover:bg-indigo-800">Submit</Button>
             <Button type="reset" className="bg-gray-400 hover:bg-gray-500" onClick={onEditCancel}>Cancel</Button>
           </div>
+        </form>
+      </Modal>
+
+      {/* DELETE PRODUCT MODAL */}
+      <Modal isOpen={isOpenDeleteModal} closeModal={closeDeleteModal} title={"Are You Sure You Want to Delete This Product?"}>
+        <form className="space-y-3" onSubmit={submitDeleteHandler}>
+      
+          <p className="text-md mb-6">
+            This action <span className="text-red-500"><b>cannot be undone.</b></span>
+            <br/>Deleting this product will permanently remove it from your inventory, and any associated data will be lost.
+            <br/>Are you sure you want to proceed?
+          </p>
+          <div className="flex items-center space-x-3">
+            <Button type="submit" className="bg-red-700 hover:bg-red-800" onClick={deleteProductHandler}>Confirm</Button>
+            <Button type="reset" className="bg-amber-400 hover:bg-amber-500" onClick={onDeleteCancel}>Cancel</Button>
+          </div>
+
         </form>
       </Modal>
     </main>
