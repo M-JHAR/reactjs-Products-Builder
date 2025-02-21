@@ -11,6 +11,8 @@ import CircleColor from "./components/CircleColor";
 import { v4 as uuid } from "uuid";
 import Select from "./components/ui/Select";
 import { TProductNames } from "./types";
+import toast, { Toaster } from 'react-hot-toast';
+
 
 // ** SM -> MD -> LG -> XL -> 2xl
 const App = () => {
@@ -80,6 +82,14 @@ const App = () => {
     });
   };
 
+  const showToaster = (msg: string) => {
+      toast(`${msg}`,{
+      icon: "✅",
+      style: {backgroundColor: "black", color: "white"},
+      duration: 2000,
+      position: 'bottom-right',
+    });
+  }
   const onCancel = () => {
     setProduct(defaultProductObj);
     setTempColors([]);
@@ -101,6 +111,8 @@ const App = () => {
     event.preventDefault();
     const { title, price, imageURL, description } = product;
 
+    
+
     const errors = productValidation({ title, price, imageURL, description, colors: tempColors});
 
     const hasErrorMsg =
@@ -118,11 +130,15 @@ const App = () => {
     setTempColors([]);
     closeModal();
 
+    showToaster("Product has been successfully added");
+
   };
 
   const submitEditHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { title, price, imageURL, description } = productToEdit;
+
+   
 
     const errors = productValidation({ title, price, imageURL, description});
 
@@ -142,6 +158,8 @@ const App = () => {
     setTempColors([]);
     closeEditModal();
 
+    showToaster("Product has been successfully edited.");
+
   };
 
   const submitDeleteHandler = (event: FormEvent<HTMLFormElement>) =>{
@@ -153,6 +171,8 @@ const App = () => {
     const filtered = products.filter((product) => product.id !== productToEdit.id);
     setProducts(filtered);
     closeDeleteModal();
+
+   showToaster("Product has been successfully deleted.");
   }
     
 
@@ -320,6 +340,8 @@ const App = () => {
 
         </form>
       </Modal>
+
+      <Toaster></Toaster>
     </main>
   );
 };

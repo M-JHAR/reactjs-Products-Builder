@@ -1,7 +1,7 @@
 import Image from "./Image";
 import { IProduct } from "../interfaces";
 import Button from "./ui/Button";
-import { txtSlicer } from "../utils/functions";
+import { txtSlicer, numberWithCommas } from "../utils/functions";
 import CircleColor from "./CircleColor";
 
 interface IProbs {
@@ -34,7 +34,7 @@ const ProductCard = ({ product, setProductToEdit, openEditModal, openDeleteModal
   };
 
   return (
-    <div className="max-w-sm md:max-w-lg mx-auto md:mx-0 border rounded-md p-2  flex flex-col">
+    <div className="max-w-sm md:max-w-lg mx-auto md:mx-0 border rounded-md p-2 bg-gray-200 flex flex-col">
       <Image
         ImageURL={imageURL}
         alt={category.name}
@@ -44,17 +44,20 @@ const ProductCard = ({ product, setProductToEdit, openEditModal, openDeleteModal
       <h3>{title}</h3>
       <p>{txtSlicer(description)}</p>
 
-      <div className="flex items-center space-x-1 flex-wrap">
+      <div className="flex items-center space-x-1 mt-2 flex-wrap">
         {renderProductColors}
       </div>
 
       <div className="flex items-center justify-between">
-        <span> ${price}</span>
-        <Image
+      <span> ${numberWithCommas(price)}</span>
+        <div className="flex items-center space-x-2">
+          <p className="text-md">{category.name}</p>
+          <Image
           ImageURL={category.imageURL}
           alt={category.name}
           className=" w-10 h-10 rounded-full object-center"
-        />
+          />
+        </div>
       </div>
 
       <div className="flex items-center justify-between space-x-2 mt-3">

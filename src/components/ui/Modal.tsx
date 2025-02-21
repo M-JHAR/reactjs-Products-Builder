@@ -1,4 +1,4 @@
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import { ReactNode } from "react";
 
 interface IProbs {
@@ -18,6 +18,7 @@ const Modal = ({ isOpen, closeModal, title, children }: IProbs) => {
         onClose={closeModal}
         __demoMode
       >
+        <DialogBackdrop className="fixed inset-0 backdrop-blur-sm bg-black/30"  aria-hidden="true"/>
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
             <DialogPanel
